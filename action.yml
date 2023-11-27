@@ -29,6 +29,10 @@ inputs:
     description: 'Just fix files (`clang-format -i`) instead of returning a diff'
     required: false
     default: False
+  skipIfNoFilesFound:
+    description: 'Skip if no files found'
+    required: false
+    default: False
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -46,4 +50,6 @@ runs:
     - ${{ inputs.extensions }}
     - --exclude
     - ${{ inputs.exclude }}
+    - --skip-if-no-files-found
+    - ${{ inputs.skipIfNoFilesFound }}
     - ${{ inputs.source }}

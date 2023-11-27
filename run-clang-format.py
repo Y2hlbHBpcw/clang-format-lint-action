@@ -304,6 +304,14 @@ def main():
         type=lambda x: bool(strtobool(x)),
         default=False,
         help='Just fix files (`clang-format -i`) instead of returning a diff')
+    parser.add_argument(
+        '-s',
+        '--skip-if-no-files-found',
+        type=lambda x: bool(strtobool(x)),
+        default=False,
+        help='Skip if no files found')
+
+
 
     args = parser.parse_args()
 
@@ -356,7 +364,10 @@ def main():
 
     if not files:
         print_trouble(parser.prog, 'No files found', use_colors=colored_stderr)
-        return ExitStatus.TROUBLE
+        if args.skip_if_no_files_found:
+            return ExitStatus.SUCCESS
+        else:
+            return ExitStatus.TROUBLE
 
     if not args.quiet:
       print('Processing %s files: %s' % (len(files), ', '.join(files)))
